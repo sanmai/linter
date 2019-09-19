@@ -24,11 +24,14 @@ jobs:
       php: 7.3
       install:
         - pecl install ast
+        - pecl install pcov
         - phpenv config-rm xdebug.ini
         - composer install --prefer-dist
       script:
         - make ci-analyze --keep-going
         - composer validate
+      after_success:
+        - travis_retry php vendor/bin/php-coveralls
 
 cache:
   directories:
@@ -45,5 +48,3 @@ install:
 script:
   - make ci-test --keep-going
 
-after_success:
-  - travis_retry php vendor/bin/php-coveralls
