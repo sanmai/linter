@@ -64,10 +64,6 @@ final class LinterTest extends TestCase
      */
     public function testFailWithoutProcess()
     {
-        if (getenv('TRAVIS')) {
-            $this->markTestSkipped('Causes a segmentation fault on Travis CI');
-        }
-
         if ('' === `command -v prlimit`) {
             $this->markTestIncomplete('Please install prlimit');
         }
