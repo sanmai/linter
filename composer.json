@@ -1,0 +1,42 @@
+{
+    "name": "sanmai/linter",
+    "type": "library",
+    "description": "PHP Linter",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Alexey Kopytko",
+            "email": "alexey@kopytko.com"
+        }
+    ],
+    "require": {
+        "php": ">=7"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.13",
+        "infection/infection": "*",
+        "phan/phan": ">=1.1",
+        "php-coveralls/php-coveralls": "^2.0",
+        "phpstan/phpstan": ">=0.9",
+        "phpunit/phpunit": ">=6",
+        "vimeo/psalm": ">=2.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Linter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Linter\\": "tests/"
+        }
+    }
+}
