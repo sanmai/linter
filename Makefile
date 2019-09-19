@@ -52,13 +52,13 @@ all: test
 
 ci-test: SILENT=
 ci-test: prerequisites
-	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_COVERAGE_CLOVER) --group=$(PHPUNIT_GROUP) --debug
+	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_COVERAGE_CLOVER) --group=$(PHPUNIT_GROUP) --debug
 
 ci-analyze: SILENT=
 ci-analyze: prerequisites ci-phpunit ci-infection ci-phan ci-phpstan ci-psalm
 
 ci-phpunit: ci-cs
-	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_ARGS)
+	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS) --debug
 
 ci-infection: ci-phpunit
 	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS)
