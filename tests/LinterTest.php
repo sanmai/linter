@@ -21,12 +21,15 @@ namespace Tests\Linter;
 
 use Linter\StringLinter;
 use PHPUnit\Framework\TestCase;
+use function Pipeline\fromArray;
 
 /**
  * @covers \Linter\StringLinter
  */
 final class LinterTest extends TestCase
 {
+    const MAX_FILES_LIMIT = 30;
+
     /**
      * @dataProvider provider
      */
@@ -34,6 +37,7 @@ final class LinterTest extends TestCase
     {
         $linter = new StringLinter($input);
 
+        $this->assertSame($expected, $linter->foundErrors());
         $this->assertSame($expected, $linter->foundErrors());
     }
 
@@ -65,21 +69,23 @@ final class LinterTest extends TestCase
         }
 
         // Preload most classes needed for the test
-        new StringLinter('');
-        $this->assertTrue(true);
+        $linter = new StringLinter('<?php return 1;');
 
-        foreach (range(20, 8, -1) as $limit) {
-            // Continuously lock current process to less max files open, and less
-            exec(sprintf('prlimit --pid %d --nofile=%d:%d', getmypid(), $limit, $limit));
-            // To debug: passthru('ulimit -a');
+        // Set the number of open files to some sane value
+        exec(sprintf('prlimit --pid %d --nofile=%2$d:%2$d', getmypid(), self::MAX_FILES_LIMIT));
+        // To debug: passthru('ulimit -a');
 
-            // ...Until we hit the sweet spot where linter fails at the right moment
-            $linter = new StringLinter('<?php return 1;');
-            if ($linter->foundErrors()) {
-                return;
-            }
-        }
+        // Use up most of our limit
+        $files = fromArray(range(0, self::MAX_FILES_LIMIT))->map(function () {
+            return @tmpfile();
+        })->filter()->toArray();
 
-        $this->fail("Should fail when can't start a process");
+        // ...Until we hit the sweet spot where linter fails at the right moment
+        $linter->foundErrors();
+
+        // Close all extra files we opened
+        fromArray($files)->map('fclose')->reduce();
+
+        $this->assertTrue($linter->foundErrors(), "Should fail when can't start a process");
     }
 }
