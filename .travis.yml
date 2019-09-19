@@ -25,6 +25,7 @@ jobs:
       install:
         - pecl install ast
         - pecl install pcov
+        - pecl install runkit
         - phpenv config-rm xdebug.ini
         - composer install --prefer-dist
       script:

@@ -64,6 +64,10 @@ final class LinterTest extends TestCase
      */
     public function testFailWithoutProcess()
     {
+        if (getenv('TRAVIS')) {
+            $this->markTestSkipped('Causes a segmentation fault on Travis CI');
+        }
+
         if ('' === `command -v prlimit`) {
             $this->markTestIncomplete('Please install prlimit');
         }
@@ -87,5 +91,21 @@ final class LinterTest extends TestCase
         fromArray($files)->map('fclose')->reduce();
 
         $this->assertTrue($linter->foundErrors(), "Should fail when can't start a process");
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testFailingProcOpen()
+    {
+        if (!function_exists('runkit_function_redefine')) {
+            $this->markTestIncomplete('pecl install runkit');
+        }
+
+        runkit_function_redefine('proc_open', '', 'return false;');
+
+        $linter = new StringLinter('<?php return 1;');
+
+        $this->assertTrue($linter->foundErrors(), 'Should fail when proc_open() returns false');
     }
 }
