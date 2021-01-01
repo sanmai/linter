@@ -47,6 +47,11 @@ final class StringLinter implements Linter
         return !$this->codeIsCorrect;
     }
 
+    public function valid(): bool
+    {
+        return false === $this->foundErrors();
+    }
+
     private static function proc_open_linter(string $code): bool
     {
         // We have to override stdout and stderr here,

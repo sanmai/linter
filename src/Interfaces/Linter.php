@@ -22,4 +22,6 @@ namespace Linter\Interfaces;
 interface Linter
 {
     public function foundErrors(): bool;
+
+    public function valid(): bool;
 }

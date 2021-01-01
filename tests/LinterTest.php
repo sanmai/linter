@@ -39,6 +39,7 @@ final class LinterTest extends TestCase
 
         $this->assertSame($expected, $linter->foundErrors());
         $this->assertSame($expected, $linter->foundErrors());
+        $this->assertSame($expected, !$linter->valid());
     }
 
     public function provider()
@@ -57,6 +58,7 @@ final class LinterTest extends TestCase
 
         $linter = new StringLinter('<?php return 1;');
         $this->assertTrue($linter->foundErrors());
+        $this->assertFalse($linter->valid());
     }
 
     /**
