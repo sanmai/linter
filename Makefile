@@ -23,7 +23,7 @@ PHPUNIT_ARGS=--coverage-xml=build/logs/coverage-xml --log-junit=build/logs/junit
 
 # Phan
 PHAN=vendor/bin/phan
-PHAN_ARGS=-j $(JOBS)
+PHAN_ARGS=-j $(JOBS) --allow-polyfill-parser
 PHAN_PHP_VERSION=7.1
 export PHAN_DISABLE_XDEBUG_WARN=1
 
@@ -42,7 +42,7 @@ COMPOSER=$(PHP) $(shell which composer)
 INFECTION=vendor/bin/infection
 MIN_MSI=90
 MIN_COVERED_MSI=100
-INFECTION_ARGS=--min-msi=$(MIN_MSI) --min-covered-msi=$(MIN_COVERED_MSI) --threads=$(JOBS) --coverage=build/logs --log-verbosity=default --show-mutations
+INFECTION_ARGS=--min-msi=$(MIN_MSI) --min-covered-msi=$(MIN_COVERED_MSI) --threads=$(JOBS) --coverage=build/logs --log-verbosity=default --show-mutations --no-interaction
 
 all: test
 

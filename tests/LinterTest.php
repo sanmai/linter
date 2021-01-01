@@ -64,7 +64,7 @@ final class LinterTest extends TestCase
      */
     public function testFailWithoutProcess()
     {
-        if ('' === `command -v prlimit`) {
+        if ('' === shell_exec('command -v prlimit')) {
             $this->markTestIncomplete('Please install prlimit');
         }
 
