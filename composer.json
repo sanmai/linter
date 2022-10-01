@@ -24,6 +24,7 @@
         "vimeo/psalm": ">=0.1"
     },
     "config": {
+        "allow-plugins": true,
         "sort-packages": true
     },
     "extra": {
